@@ -1,5 +1,6 @@
 # Credits
 [NA2 Custom Models](https://github.com/NotAwesome2/MCGalaxy-CustomModels) BlockBench.cs
+
 [Classicube](https://github.com/ClassiCube/ClassiCube) Font Width Generation Algorithm (src/Drawer2D.c CalculateTextWidths())
 
 # Notes
