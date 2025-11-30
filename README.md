@@ -10,6 +10,8 @@ Any custom models generated start from ID 63 downwards, ensuring minimal conflic
 host models/sign.png on a website such as garbage.loan
 
 Type /model bot botname sign_text here etc\nanother line\nanother line\nfinal line
+
+signwall_text also works, and other custom sign models with part named "board" can be placed in the models folder
  
 to place a sign, make sure to then manually set the bot / player's skin to the hosted sign.png to have it textured
 
