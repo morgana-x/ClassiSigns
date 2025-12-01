@@ -9,6 +9,10 @@ Any custom models generated start from ID 63 downwards, ensuring minimal conflic
 Only currently supports lower case letters part of the standard alphabet, any upper case letters or symbols/numbers will display incorrect characters
 
 # Usage
+Copy the models folder into the plugins folder
+
+If you don't already have `Newtonsoft.Json.dll` from [NA2 Custom Models](https://github.com/NotAwesome2/MCGalaxy-CustomModels), download it and paste it into the same directory as MCGalaxy.exe
+
 `/sign sign_model text here etc`
 
 eg
