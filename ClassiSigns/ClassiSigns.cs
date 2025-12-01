@@ -50,10 +50,10 @@ namespace ClassiSigns
         public static string DefaultSkinLink;
         public override void Load(bool auto)
         {
-            if (!File.Exists("plugins/signskin.txt"))
-                File.WriteAllText("plugins/signskin.txt", "https://garbage.loan/f/morgana/sign.png");
+            if (!File.Exists("plugins/ClassiSignsSkin.txt"))
+                File.WriteAllText("plugins/ClassiSignsSkin.txt", "https://garbage.loan/f/morgana/sign.png");
             else
-                DefaultSkinLink = File.ReadAllText("plugins/signskin.txt").Trim();
+                DefaultSkinLink = File.ReadAllText("plugins/ClassiSignsSkin.txt").Trim();
 
             foreach(var s in FileIO.TryGetFiles("plugins/models/", "*.bbmodel"))
             {
