@@ -36,7 +36,7 @@ namespace ClassiSigns.Commands
             var playerbot = new PlayerBot($"sign_{p.name}_{p.level.Bots.Items.Where((x => { return x.name.StartsWith($"sign_{p.name}") || (x.Model.StartsWith("sign") && x.Owner == p.name); })).Count()}", p.level);
 
             playerbot.SetModel(signmodelname);
-            playerbot.DisplayName = "";
+          //  playerbot.DisplayName = "";
             playerbot.SkinName = ClassiSigns.DefaultSkinLink;
             playerbot.AIName = signmodelname;
             playerbot.SetInitialPos(p.Pos);
