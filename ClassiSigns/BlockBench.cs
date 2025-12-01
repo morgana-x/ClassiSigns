@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MCGalaxy.Commands;
 using MCGalaxy.Maths;
-using MCGalaxy.Network;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using MCGalaxy;
-using System.Linq;
 
 namespace ClassiSigns
 {
@@ -55,19 +52,15 @@ namespace ClassiSigns
 #pragma warning disable 0649
     public class BlockBench
     {
-
-        private static readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
-        {
-            Converters = new[] { new Vec3F32Converter() }
-        };
-
-
         // measured in pixels where 16 pixels = 1 block's length
         public const float maxWidth = 16;
         public const float maxHeight = 32;
 
         // graceLength is how far (in pixels) you can extend past max width/height on all sides
-
+        private static readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
+        {
+            Converters = new[] { new Vec3F32Converter() }
+        };
 
         public class JsonRoot
         {

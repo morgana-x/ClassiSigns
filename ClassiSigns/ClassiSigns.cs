@@ -1,11 +1,8 @@
-﻿using MCGalaxy;
-using MCGalaxy.Config;
-using MCGalaxy.Events.EntityEvents;
-using MCGalaxy.Events.PlayerEvents;
-using MCGalaxy.Network;
-using System;
+﻿using ClassiSigns.Commands;
+using MCGalaxy;
 using System.Collections.Generic;
 using System.IO;
+
 namespace ClassiSigns
 {
     public class ClassiSigns : Plugin
@@ -50,9 +47,13 @@ namespace ClassiSigns
             }
         }
 
-
+        public static string DefaultSkinLink;
         public override void Load(bool auto)
         {
+            if (!File.Exists("plugins/signskin.txt"))
+                File.WriteAllText("plugins/signskin.txt", "https://garbage.loan/f/morgana/sign.png");
+            else
+                DefaultSkinLink = File.ReadAllText("plugins/signskin.txt").Trim();
 
             foreach(var s in FileIO.TryGetFiles("plugins/models/", "*.bbmodel"))
             {
@@ -64,10 +65,12 @@ namespace ClassiSigns
             }
 
             SignSender.Load();
+            Command.Register(new Commands.Sign());
         }
 
         public override void Unload(bool auto)
         {
+            Command.Unregister(Command.Find("sign"));
             SignSender.Unload();
         }
 
