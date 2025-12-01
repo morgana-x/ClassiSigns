@@ -7,13 +7,12 @@
 Any custom models generated start from ID 63 downwards, ensuring minimal conflict with plugins such as Na2's MCGalaxy-CustomModels
 
 # Usage
-host models/sign.png on a website such as garbage.loan
+`/sign sign_model text here etc`
+eg
+`/sign sign This is a standing sign with a stick`
+`/sign signwall This is a sign that would go on the center of a wall without a stick`
 
-Type /model bot botname sign_text here etc\nanother line\nanother line\nfinal line
- 
-to place a sign, make sure to then manually set the bot / player's skin to the hosted sign.png to have it textured
-
-signwall_text also works, and other custom sign models with part named "board" can be placed in the models folder
+Also updates the model of any entity with the model of `validsignmodel_text here` with a sign, like `sign_Hello there` or `signwall_Hello there`
 
 # Screenshots
 
