@@ -13,9 +13,10 @@ namespace ClassiSigns.Commands
         public override LevelPermission defaultRank => LevelPermission.AdvBuilder;
         public override void Help(Player p)
         {
-            p.Message("/sign model text here\\nline2\\nline3\\nline4");
-            p.Message("eg: /sign sign text here\\nline2\\nline3\\nline4");
-            p.Message("eg: /sign signwall text here\\nline2\\nline3\\nline4");
+            p.Message("/sign text here");
+            p.Message("/sign model text here");
+            p.Message("eg: /sign text here");
+            p.Message("eg: /sign signwall text here");
         }
 
         public override void Use(Player p, string message)
@@ -59,7 +60,7 @@ namespace ClassiSigns.Commands
             playerbot.Owner = p.name;
             PlayerBot.Add(playerbot);
 
-            p.Message($"Spawned sign, model {signmodel} {signtext}");
+            p.Message($"Spawned sign with text \"{signtext}\"");
         }
     }
 }

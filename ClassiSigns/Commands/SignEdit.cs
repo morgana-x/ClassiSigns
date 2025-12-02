@@ -13,8 +13,8 @@ namespace ClassiSigns.Commands
         public override LevelPermission defaultRank => LevelPermission.AdvBuilder;
         public override void Help(Player p)
         {
-            p.Message("/signedit botname text here\\nline2\\nline3\\nline4");
-            p.Message("eg: /sign sign_morgana_0 text here\\nline2\\nline3\\nline4");
+            p.Message("/signedit botname text here");
+            p.Message("eg: /sign sign_morgana_0 text here");
         }
 
         public override void Use(Player p, string message)
@@ -45,19 +45,15 @@ namespace ClassiSigns.Commands
             {
                 p.Message("Bot is not a valid sign!");
                 return;
-                //if (!SignSender.TryParseSignModel(signmodel, out signmodel, out _))
-               //     signmodel = ClassiSigns.SignModels.First().Key;
             }
 
             string signtext =  string.Join(" ", args.ToArray(), 1, args.Count - 1).TrimEnd();
-            //  playerbot.DisplayName = "";
 
             playerbot.SkinName = ClassiSigns.DefaultSkinLink;
             playerbot.AIName = signtext;
             playerbot.UpdateModel(signmodel);
 
-
-            p.Message($"Spawned sign, model {signmodel} {signtext}");
+            p.Message($"Changed signs text to \"{signtext}");
         }
     }
 }

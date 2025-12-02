@@ -48,21 +48,11 @@ namespace ClassiSigns
         }
 
         public static string DefaultSkinLink;
+
         public override void Load(bool auto)
         {
-            if (!File.Exists("plugins/ClassiSignsSkin.txt"))
-                File.WriteAllText("plugins/ClassiSignsSkin.txt", "https://garbage.loan/f/morgana/sign.png");
-            else
-                DefaultSkinLink = File.ReadAllText("plugins/ClassiSignsSkin.txt").Trim();
-
-            foreach(var s in FileIO.TryGetFiles("plugins/models/", "*.bbmodel"))
-            {
-                var filename = Path.GetFileNameWithoutExtension(s);
-                if (!filename.StartsWith("sign"))
-                    continue;
-                SignModels.Add(filename, new SignModel(s));
-                Player.Console.Message($"Added sign {filename} " + s);
-            }
+            LoadConfig();
+            LoadModels();
 
             SignSender.Load();
             Command.Register(new Commands.Sign());
@@ -76,5 +66,24 @@ namespace ClassiSigns
             SignSender.Unload();
         }
 
+        void LoadConfig()
+        {
+            if (!File.Exists("plugins/ClassiSignsSkin.txt"))
+                File.WriteAllText("plugins/ClassiSignsSkin.txt", "https://garbage.loan/f/morgana/sign.png");
+            else
+                DefaultSkinLink = File.ReadAllText("plugins/ClassiSignsSkin.txt").Trim();
+        }
+
+        void LoadModels()
+        {
+            foreach (var s in FileIO.TryGetFiles("plugins/models/", "*.bbmodel"))
+            {
+                var filename = Path.GetFileNameWithoutExtension(s);
+                if (!filename.StartsWith("sign"))
+                    continue;
+                SignModels.Add(filename, new SignModel(s));
+                Player.Console.Message($"Added sign {filename} " + s);
+            }
+        }
     }
 }

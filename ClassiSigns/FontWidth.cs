@@ -1,9 +1,8 @@
 ﻿using MCGalaxy;
 using MCGalaxy.Util;
-using MCGalaxy.Util.Imaging;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 namespace ClassiSigns
 {
     public unsafe class FontWidth
@@ -11,12 +10,21 @@ namespace ClassiSigns
 
         public static Dictionary<int, float> CalculateTextWidths(string path="plugins/models/sign.png")
         {
-            
             return CalculateTextWidths(System.IO.File.ReadAllBytes(path));
         }
 
         const int LOG2_CHARS_PER_ROW = 4;
         public static int tileSize = 8;
+
+        private static Dictionary<int, float> _widthmap;
+        public static Dictionary<int, float> WidthMap { get {
+                if (_widthmap == null)
+                    _widthmap = CalculateTextWidths();
+                return _widthmap;
+            }
+
+            set { _widthmap = value; }
+        }
         public static Dictionary<int, float> CalculateTextWidths(byte[] bitmapdata)
         {
             var texture = ImageUtils.DecodeImage(bitmapdata, Player.Console);
@@ -66,7 +74,7 @@ namespace ClassiSigns
             return tileWidths;
         }
 
-        public static void CalculateCharUV(int c, out ushort srcX, out ushort srcY, out ushort dstX, out ushort dstY )
+        public static void CalculateCharUV(int c, out ushort srcX, out ushort srcY, out ushort dstX, out ushort dstY, out float cWidth )
         {
             int cx = (c & 0xF) * tileSize;
             int cy = (c >> 4) * tileSize;
@@ -75,6 +83,8 @@ namespace ClassiSigns
             srcY = (ushort)(cy); // v1
             dstX = (ushort)(cx + tileSize); // u2
             dstY = (ushort)(cy + tileSize); // v2
+
+            cWidth = WidthMap.ContainsKey(c) ? WidthMap[c] : 8;
         }
     }
 }

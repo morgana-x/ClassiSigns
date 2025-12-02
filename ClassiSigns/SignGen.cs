@@ -15,9 +15,6 @@ namespace ClassiSigns
     }
     public class SignGen
     {
-
-       
-        public static Dictionary<int, float> WidthMap = FontWidth.CalculateTextWidths();
         public static DefinedSign GenerateSignModel(byte modelID, string modelname, string signtext, string signmodel)
         {
             var signModel = ClassiSigns.SignModels.ContainsKey(signmodel) ? ClassiSigns.SignModels[signmodel] : ClassiSigns.SignModels.Values.FirstOrDefault();
@@ -53,7 +50,7 @@ namespace ClassiSigns
 
 
                 int c = signtext[idx].UnicodeToCp437();
-                float cw = (((WidthMap.ContainsKey(c) ? WidthMap[c] : 8) + 1) / FontWidth.tileSize) * characterSize;
+                float cw = (((FontWidth.WidthMap.ContainsKey(c) ? FontWidth.WidthMap[c] : 8) + 1) / FontWidth.tileSize) * characterSize;
 
                 if (linebreak || line.Replace(" ", "").Length >= 15 || lx + cw > signwidth)
                 {
@@ -83,12 +80,12 @@ namespace ClassiSigns
                 {
                     int c = text[i].UnicodeToCp437();
 
-                    FontWidth.CalculateCharUV(c, out ushort srcX, out ushort srcY, out ushort dstX, out ushort dstY);
+                    FontWidth.CalculateCharUV(c, out ushort srcX, out ushort srcY, out ushort dstX, out ushort dstY, out float cWidth);
 
                     
                     var pos = new MCGalaxy.Maths.Vec3F32((6.3f - ((textX / FontWidth.tileSize) * characterSize)) / 16f, (topofsign - (x * 1.55f)) / 16f, -0.505f / 16f); //new MCGalaxy.Maths.Vec3F32((6.75f - (i * 1.05f)) / 16f, (14.15f - (x * 1.75f))/16f, -0.505f / 16f);
 
-                    textX += (WidthMap.ContainsKey(c) ? WidthMap[c] : 8) + 1;
+                    textX += cWidth + 1;
                     if (text[i] == ' ') continue; // Don't add a part for a space
                     parts.Add(new CustomModelPart()
                     {
