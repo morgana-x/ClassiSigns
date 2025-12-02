@@ -70,8 +70,8 @@ namespace ClassiSigns
         {
             if (!File.Exists("plugins/ClassiSignsSkin.txt"))
                 File.WriteAllText("plugins/ClassiSignsSkin.txt", "https://garbage.loan/f/morgana/sign.png");
-            else
-                DefaultSkinLink = File.ReadAllText("plugins/ClassiSignsSkin.txt").Trim();
+
+            DefaultSkinLink = File.ReadAllText("plugins/ClassiSignsSkin.txt").Trim();
         }
 
         void LoadModels()
