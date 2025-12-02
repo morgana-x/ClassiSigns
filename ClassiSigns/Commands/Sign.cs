@@ -13,10 +13,10 @@ namespace ClassiSigns.Commands
         public override LevelPermission defaultRank => LevelPermission.AdvBuilder;
         public override void Help(Player p)
         {
-            p.Message("/sign text here");
-            p.Message("/sign model text here");
-            p.Message("eg: /sign text here");
-            p.Message("eg: /sign signwall text here");
+            p.Message("&a/sign [message]");
+            p.Message("&a/sign [model] [message]");
+            p.Message("eg: &5/sign Hello!");
+            p.Message("eg: &5/sign signwall Hi there!");
         }
 
         public override void Use(Player p, string message)

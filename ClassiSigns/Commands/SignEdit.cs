@@ -1,6 +1,5 @@
 ﻿using MCGalaxy;
 using System.Linq;
-using static ClassiSigns.ClassiSigns;
 
 namespace ClassiSigns.Commands
 {
@@ -13,8 +12,8 @@ namespace ClassiSigns.Commands
         public override LevelPermission defaultRank => LevelPermission.AdvBuilder;
         public override void Help(Player p)
         {
-            p.Message("/signedit botname text here");
-            p.Message("eg: /sign sign_morgana_0 text here");
+            p.Message("&a/signedit [bot] [message]");
+            p.Message($"eg: &5/signedit sign_{p.name}_0 Hello!");
         }
 
         public override void Use(Player p, string message)
