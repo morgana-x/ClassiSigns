@@ -11,11 +11,15 @@ Copy the models folder into the plugins folder
 
 If you don't already have `Newtonsoft.Json.dll` from [NA2 Custom Models](https://github.com/NotAwesome2/MCGalaxy-CustomModels), download it and paste it into the same directory as MCGalaxy.exe
 
-`/sign sign_model text here etc`
+`/sign signmodel text here etc`
+
+or
+
+`/sign text here` (not defining valid sign model will make the command use the first valid sign model that's available)
 
 eg
 
-`/sign sign This is a standing sign with a stick`
+`/sign This is a standing sign with a stick`
 
 `/sign signwall This is a sign that would go on the center of a wall without a stick`
 
