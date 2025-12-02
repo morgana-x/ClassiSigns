@@ -6,8 +6,6 @@
 # Notes
 Any custom models generated start from ID 63 downwards, ensuring minimal conflict with plugins such as Na2's MCGalaxy-CustomModels
 
-Only currently supports lower case letters part of the standard alphabet, any upper case letters or symbols/numbers will display incorrect characters
-
 # Usage
 Copy the models folder into the plugins folder
 
