@@ -43,8 +43,10 @@ namespace ClassiSigns.Commands
 
             if (!ClassiSigns.SignModels.ContainsKey(signmodel))
             {
-                if (!SignSender.TryParseSignModel(signmodel, out signmodel, out _))
-                    signmodel = ClassiSigns.SignModels.First().Key;
+                p.Message("Bot is not a valid sign!");
+                return;
+                //if (!SignSender.TryParseSignModel(signmodel, out signmodel, out _))
+               //     signmodel = ClassiSigns.SignModels.First().Key;
             }
 
             string signtext =  string.Join(" ", args.ToArray(), 1, args.Count - 1).TrimEnd();
