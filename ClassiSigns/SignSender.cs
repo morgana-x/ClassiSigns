@@ -51,14 +51,15 @@ namespace ClassiSigns
                 if (!TryParseSignModel(model, out string signmodel, out string signtext))
                     return;
 
-                var signid = GetFreeID(dst);
-                var signinstance = new SignInstance() { Id = signid, DefinedSign = SignGen.GenerateSignModel(signid, model, signtext, signmodel) };
-
                 if (!DefinedSigns.ContainsKey(dst))
                     DefinedSigns.Add(dst, new Dictionary<string, SignInstance>());
 
                 if (Defined(dst, model))
                     return;
+
+                var signid = GetFreeID(dst);
+                var signinstance = new SignInstance() { Id = signid, DefinedSign = SignGen.GenerateSignModel(signid, model, signtext, signmodel) };
+
                 DefinedSigns[dst].Add(model, signinstance);
                 SignGen.DefineSignPacket(dst, signinstance.Id, signinstance.DefinedSign);
             }
@@ -82,11 +83,10 @@ namespace ClassiSigns
 
         void SendingModel(Entity e, ref string model, Player dst)
         {
-            if (e is PlayerBot && ((PlayerBot)e).AIName != null && ClassiSigns.SignModels.ContainsKey(e.Model))
+
+            if (e is PlayerBot && ((PlayerBot)e).AIName != null && ClassiSigns.SignModels.ContainsKey(model))
             {
-                string storedsign = e.Model + "_" + ((PlayerBot)e).AIName;
-                Define(dst, storedsign);
-                return;
+                model = model + "_" + ((PlayerBot)e).AIName;
             }
 
             if (!model.StartsWith("sign") && !model.Contains("_"))
@@ -107,7 +107,24 @@ namespace ClassiSigns
                 DefinedSigns.Remove(p);
         }
 
-        static bool TryParseSignModel(string modelname, out string signmodel, out string signtext)
+      
+
+
+        public static byte GetFreeID(Player p)
+        {
+            byte id = Packet.MaxCustomModels-1;
+            if (!DefinedSigns.ContainsKey(p))
+                return id;
+            lock (DefinedSigns)
+            {
+                foreach (var s in DefinedSigns[p].ToList())
+                    if (s.Value.Id == id)
+                        id--;
+            }
+            
+            return id;
+        }
+        public static bool TryParseSignModel(string modelname, out string signmodel, out string signtext)
         {
             signmodel = string.Empty;
             signtext = string.Empty;
@@ -130,22 +147,5 @@ namespace ClassiSigns
             signtext = modelname.Substring(underscore + 1);
             return true;
         }
-
-
-        public static byte GetFreeID(Player p)
-        {
-            byte id = Packet.MaxCustomModels-1;
-            if (!DefinedSigns.ContainsKey(p))
-                return id;
-            lock (DefinedSigns)
-            {
-                foreach (var s in DefinedSigns[p].ToList())
-                    if (s.Value.Id == id)
-                        id--;
-            }
-            
-            return id;
-        }
-      
     }
 }

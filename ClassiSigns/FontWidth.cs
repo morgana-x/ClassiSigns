@@ -15,15 +15,20 @@ namespace ClassiSigns
             return CalculateTextWidths(System.IO.File.ReadAllBytes(path));
         }
 
-       
+        const int LOG2_CHARS_PER_ROW = 4;
+        public static int tileSize = 8;
         public static Dictionary<int, float> CalculateTextWidths(byte[] bitmapdata)
         {
             var texture = ImageUtils.DecodeImage(bitmapdata, Player.Console);
+
 
             Dictionary<int, float> tileWidths = new Dictionary<int, float>();
             if (texture == null) return tileWidths;
             int width = texture.Width;
             int height = texture.Height;
+
+            tileSize = width >> LOG2_CHARS_PER_ROW;
+
             Logger.Log(LogType.ConsoleMessage, width.ToString());
             Logger.Log(LogType.ConsoleMessage, height.ToString());
             int i = 0;
@@ -32,7 +37,6 @@ namespace ClassiSigns
             int xx = 0;
             int tileY=0;
 
-            int tileSize = 8;
 
             texture.LockBits();
             for (y = 0; y < height; y++)
@@ -62,5 +66,15 @@ namespace ClassiSigns
             return tileWidths;
         }
 
+        public static void CalculateCharUV(int c, out ushort srcX, out ushort srcY, out ushort dstX, out ushort dstY )
+        {
+            int cx = (c & 0xF) * tileSize;
+            int cy = (c >> 4) * tileSize;
+
+            srcX = (ushort)(cx); // u1
+            srcY = (ushort)(cy); // v1
+            dstX = (ushort)(cx + tileSize); // u2
+            dstY = (ushort)(cy + tileSize); // v2
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MCGalaxy;
 using System.Linq;
+using System.Reflection;
 
 namespace ClassiSigns.Commands
 {
@@ -19,32 +20,46 @@ namespace ClassiSigns.Commands
 
         public override void Use(Player p, string message)
         {
-            var args = message.Split(' ');
-            if (args.Length < 2)
+            if (p == Player.Console)
+            {
+                p.Message("have to be in-game to use this!");
+                return;
+            }
+
+            var args = message.Split(' ').ToList();
+            if (args.Count < 1)
             {
                 Help(p);
                 return;
             }
-            if (!ClassiSigns.SignModels.ContainsKey(args[0]))
+
+            if (args.Count == 1 || !ClassiSigns.SignModels.ContainsKey(args[0]))
             {
-                p.Message(args[0] + " is not a valid model");
+                args.Insert(0, ClassiSigns.SignModels.First().Key);
+            }
+
+            string signtext = string.Join(" ", args.ToArray(), 1, args.Count - 1).TrimEnd();
+
+            if (signtext.Trim() == "")
+            {
+                p.Message("Cannot have a blank sign!!!");
                 return;
             }
 
-            var signmodelname = args[0]+"_"+string.Join(" ", args, 1, args.Count() - 1).TrimEnd();
+            string signmodel = args[0];// +"_"+string.Join(" ", args.ToArray(), 1, args.Count - 1).TrimEnd();
 
             var playerbot = new PlayerBot($"sign_{p.name}_{p.level.Bots.Items.Where((x => { return x.name.StartsWith($"sign_{p.name}") || (x.Model.StartsWith("sign") && x.Owner == p.name); })).Count()}", p.level);
 
-            playerbot.SetModel(signmodelname);
-          //  playerbot.DisplayName = "";
+
             playerbot.SkinName = ClassiSigns.DefaultSkinLink;
-            playerbot.AIName = signmodelname;
             playerbot.SetInitialPos(p.Pos);
             playerbot.Rot = p.Rot;
-
+            playerbot.AIName = signtext;
+            playerbot.SetModel(signmodel);
+            playerbot.Owner = p.name;
             PlayerBot.Add(playerbot);
-            playerbot.GlobalSpawn();
-            p.Message($"Spawned sign, model {signmodelname}");
+
+            p.Message($"Spawned sign, model {signmodel} {signtext}");
         }
     }
 }

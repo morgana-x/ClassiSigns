@@ -13,35 +13,13 @@ namespace ClassiSigns
         public string Text { get; set; }
         public string Name { get; set;}
     }
-
     public class SignGen
     {
+
+       
         public static Dictionary<int, float> WidthMap = FontWidth.CalculateTextWidths();
         public static DefinedSign GenerateSignModel(byte modelID, string modelname, string signtext, string signmodel)
         {
-            signtext = signtext.Replace("\n", "\\n");
-            List<string> lines = new List<string>();
-
-            int idx = 0;
-            int l = 0;
-            string line = "";
-            while (lines.Count < 4)
-            {
-                bool linebreak = (idx < signtext.Length - 1 && signtext[idx] == '\\' && signtext[idx + 1] == 'n');
-                if (l > 15 || (idx >= signtext.Length) || linebreak)
-                {
-                    lines.Add(line);
-                    line = "";
-                    if (linebreak)
-                        idx += 2;
-                    l = 0;
-                    continue;
-                }
-                line += signtext[idx];
-              //  if (signtext[idx] != ' ')
-                    l++;
-                idx++;
-            }
             var signModel = ClassiSigns.SignModels.ContainsKey(signmodel) ? ClassiSigns.SignModels[signmodel] : ClassiSigns.SignModels.Values.FirstOrDefault();
             var signParts = Array.ConvertAll(signModel.Parts, new Converter<NamedPart, NamedPart>(x => x));
 
@@ -53,36 +31,62 @@ namespace ClassiSigns
 
 
             var topofsign = 13.85f;
+            var signwidth = 16f;
+            float characterSize = 1.5f; // 1.05f
             var board = signParts.Where((spart) => { return spart.Name == "board"; }).First();
             if (board != null && parts.Contains(board.Part))
+            {
                 topofsign = (board.Part.max.Y * 16f) - 1.75f;
+                signwidth = (board.Part.max.X - board.Part.min.X) * 16f;
+            }
 
-            float characterSize = 1.5f; // 1.05f
 
-            for (int x = 0; x < 4; x++)
+            List<string> lines = new List<string>();
+
+            int idx = 0;
+            float lx = 0;
+            string line = "";
+
+            while (lines.Count < 4 && idx < signtext.Length)
+            {
+                bool linebreak = (signtext[idx] == '\n' || (idx < signtext.Length - 1 && signtext[idx] == '\\' && signtext[idx + 1] == 'n'));
+
+
+                int c = signtext[idx].UnicodeToCp437();
+                float cw = (((WidthMap.ContainsKey(c) ? WidthMap[c] : 8) + 1) / FontWidth.tileSize) * characterSize;
+
+                if (linebreak || line.Replace(" ", "").Length >= 15 || lx + cw > signwidth)
+                {
+                    lines.Add(line);
+                    line = "";
+                    lx = 0;
+                    if (linebreak)
+                        idx += 2;
+                    continue;
+                }
+
+                line += signtext[idx];
+                lx += cw;
+                idx++;
+            }
+            if (line != "" && lines.Count < 4)
+                lines.Add(line);
+
+
+
+
+            for (int x = 0; x < lines.Count && x < 4; x++)
             {
                 string text = lines[x];
                 float textX = 0f;
                 for (int i = 0; i < text.Length; i++)
                 {
-                    int c = text[i];
+                    int c = text[i].UnicodeToCp437();
 
-                    int cx = (c & 0xF) * 8;
-                    int cy = (c >> 4) * 8;
-
-                    ushort srcX = (ushort)(cx); // u1
-                    ushort srcY = (ushort)(cy); // v1
-                    ushort dstX = (ushort)(cx + 8); // u2
-                    ushort dstY = (ushort)(cy + 8); // v2
-
-                    if (text[i].ToString().ToUpper() == text[i].ToString())
-                    {
-                        dstY -= 16;
-                        srcY -= 16;
-                    }
+                    FontWidth.CalculateCharUV(c, out ushort srcX, out ushort srcY, out ushort dstX, out ushort dstY);
 
                     
-                    var pos = new MCGalaxy.Maths.Vec3F32((6.3f - ((textX / 8f) * characterSize)) / 16f, (topofsign - (x * 1.55f)) / 16f, -0.505f / 16f); //new MCGalaxy.Maths.Vec3F32((6.75f - (i * 1.05f)) / 16f, (14.15f - (x * 1.75f))/16f, -0.505f / 16f);
+                    var pos = new MCGalaxy.Maths.Vec3F32((6.3f - ((textX / FontWidth.tileSize) * characterSize)) / 16f, (topofsign - (x * 1.55f)) / 16f, -0.505f / 16f); //new MCGalaxy.Maths.Vec3F32((6.75f - (i * 1.05f)) / 16f, (14.15f - (x * 1.75f))/16f, -0.505f / 16f);
 
                     textX += (WidthMap.ContainsKey(c) ? WidthMap[c] : 8) + 1;
                     if (text[i] == ' ') continue; // Don't add a part for a space

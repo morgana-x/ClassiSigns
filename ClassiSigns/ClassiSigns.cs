@@ -66,11 +66,13 @@ namespace ClassiSigns
 
             SignSender.Load();
             Command.Register(new Commands.Sign());
+            Command.Register(new Commands.SignEdit());
         }
 
         public override void Unload(bool auto)
         {
             Command.Unregister(Command.Find("sign"));
+            Command.Unregister(Command.Find("signedit"));
             SignSender.Unload();
         }
 
