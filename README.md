@@ -26,6 +26,8 @@ eg
 Also updates the model of any entity with the model of `validsignmodel_text here` with a sign, like `sign_Hello there` or `signwall_Hello there`
 
 # Screenshots
+<img width="1920" height="1080" alt="Screenshot (6744)" src="https://github.com/user-attachments/assets/24e0dff8-2c40-4628-a292-64b205deba05" />
+
 <img width="1920" height="1080" alt="Screenshot (6743)" src="https://github.com/user-attachments/assets/40aeb0b3-eca1-421e-8b6e-c6e6afbef0ec" />
 
 <img width="1920" height="1080" alt="Screenshot (6739)" src="https://github.com/user-attachments/assets/745d9a41-3744-46fb-877c-8bc13cb0c35c" />
