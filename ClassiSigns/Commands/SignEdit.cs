@@ -16,13 +16,16 @@ namespace ClassiSigns.Commands
             p.Message($"eg: &5/signedit sign_{p.name}_0 Hello!");
         }
 
-        public override void Use(Player p, string message)
+        public override void Use(Player p, string message, CommandData data)
         {
             if (p == Player.Console)
             {
                 p.Message("have to be in-game to use this!");
                 return;
             }
+            if (!LevelInfo.Check(p, data.Rank, p.level, "modify bots in this level"))
+                return;
+
             var args = message.Split(' ').ToList();
             if (args.Count < 2)
             {
