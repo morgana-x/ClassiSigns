@@ -9,7 +9,7 @@ namespace ClassiSigns.Commands
 
         public override string type => "Building";
 
-        public override LevelPermission defaultRank => LevelPermission.AdvBuilder;
+        public override LevelPermission defaultRank => LevelPermission.Admin;
         public override void Help(Player p)
         {
             p.Message("&a/signedit [bot] [message]");
@@ -46,13 +46,19 @@ namespace ClassiSigns.Commands
                 return;
             }
 
+            if (!PlayerBot.CanEditAny(p) && !playerbot.Owner.CaselessEq(p.name))
+            {
+                p.Message("You cannot edit this sign!");
+                return;
+            }
+
             string signtext =  string.Join(" ", args.ToArray(), 1, args.Count - 1).TrimEnd();
 
             playerbot.SkinName = ClassiSigns.DefaultSkinLink;
             playerbot.AIName = signtext;
             playerbot.UpdateModel(signmodel);
 
-            p.Message($"Changed signs text to \"{signtext}");
+            p.Message($"Changed signs text to \"{signtext}\"");
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ClassiSigns.Commands
 
         public override string type => "Building";
 
-        public override LevelPermission defaultRank => LevelPermission.AdvBuilder;
+        public override LevelPermission defaultRank => LevelPermission.Admin;
         public override void Help(Player p)
         {
             p.Message("&a/sign [message]");
@@ -19,11 +19,19 @@ namespace ClassiSigns.Commands
             p.Message("eg: &5/sign signwall Hi there!");
         }
 
-        public override void Use(Player p, string message)
+        public override void Use(Player p, string message, CommandData data)
         {
             if (p == Player.Console)
             {
                 p.Message("have to be in-game to use this!");
+                return;
+            }
+
+            if (!LevelInfo.Check(p, data.Rank, p.level, "modify bots in this level"))
+                return;
+            if (p.level.Bots.Count >= Server.Config.MaxBotsPerLevel)
+            {
+                p.Message("Reached maximum number of bots allowed on this map.");
                 return;
             }
 
@@ -48,8 +56,17 @@ namespace ClassiSigns.Commands
             }
 
             string signmodel = args[0];// +"_"+string.Join(" ", args.ToArray(), 1, args.Count - 1).TrimEnd();
+     
 
-            var playerbot = new PlayerBot($"sign_{p.name}_{p.level.Bots.Items.Where((x => { return x.name.StartsWith($"sign_{p.name}") || (x.Model.StartsWith("sign") && x.Owner == p.name); })).Count()}", p.level);
+            int signnumber = 0;
+            foreach (var bot in p.level.Bots.Items)
+            {
+                if (bot.name == $"sign_{p.name}_{signnumber}")
+                    signnumber++;
+                else
+                    break;
+            }
+            var playerbot = new PlayerBot($"sign_{p.name}_{signnumber}", p.level);
 
 
             playerbot.SkinName = ClassiSigns.DefaultSkinLink;
